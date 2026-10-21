@@ -1,28 +1,25 @@
 {
-  "name": "nextjs-app-router-projects",
+  "name": "nextjs-app-router-projects-monorepo",
   "version": "1.0.0",
   "private": true,
+  "description": "Next.js App Router Projects: Travel Destination Explorer & Student Directory",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev:travel": "npm --prefix travel-destination-explorer run dev",
+    "build:travel": "npm --prefix travel-destination-explorer run build",
+    "start:travel": "npm --prefix travel-destination-explorer run start",
+    "dev:student": "npm --prefix student-directory run dev",
+    "build:student": "npm --prefix student-directory run build",
+    "start:student": "npm --prefix student-directory run start",
+    "install:all": "npm --prefix travel-destination-explorer install && npm --prefix student-directory install"
   },
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.453.0",
-    "next": "^14.2.15",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.5.4"
-  },
-  "devDependencies": {
-    "@types/node": "^20.17.0",
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.1",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "tailwindcss": "^3.4.14",
-    "typescript": "^5.6.3"
-  }
+  "keywords": [
+    "nextjs",
+    "app-router",
+    "travel-destination-explorer",
+    "student-directory",
+    "typescript",
+    "tailwind"
+  ],
+  "author": "dhyeyptl10 <patel.dhyey.cg@gmail.com>",
+  "license": "MIT"
 }
