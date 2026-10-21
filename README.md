@@ -1,115 +1,127 @@
-# Next.js App Router — Multi-Project Architecture Implementation
+# Next.js App Router Projects
 
-> **Submission for Frontend Development Assignment**  
-> **Student:** Dhyey Patel (`dhyeyptl10`)  
-> **Repository:** [https://github.com/dhyeyptl10/Assignment-Submission-](https://github.com/dhyeyptl10/Assignment-Submission-)  
-> **Framework:** Next.js 14.2 (App Router) • TypeScript • Tailwind CSS
+A hands-on implementation of two full frontend applications built using **Next.js 14 (App Router)**, **TypeScript**, and **Tailwind CSS**. Both projects are built according to the provided UI designs with custom routing, nested layouts, realistic dummy data, and responsive design.
 
 ---
 
-## 📌 Selected Projects Overview
+## 📌 Selected Projects
 
-This repository provides an implementation of two distinct projects from the official requirements using Next.js App Router:
-
-| Project | Name | Domain | Primary Routing Concepts |
-|---|---|---|---|
-| **Project 1** | **Travel Destination Explorer (Wayfinder)** | Spatial cartography & travel catalog | Dynamic routes `[id]`, Optional catch-all `[[...slug]]`, Route groups `(planner)`, Nested layouts, Custom `not-found.tsx` |
-| **Project 2** | **Student Directory (Campus Directory)** | Academic informatics portal | Dynamic routes `[id]`, Nested dynamic segments `[dept]/[specialization]`, Query filters, Custom `not-found.tsx` |
+1. **Travel Destination Explorer (Wayfinder)** — A cartographic travel portal with dynamic destination guides, multi-level regional catch-all routes, and an itinerary workspace route group.
+2. **Student Directory (Campus Directory)** — A university directory featuring live search, department filtering, dynamic student profile pages, and nested specialization routes.
 
 ---
 
 ## 🗺️ Project 1: Travel Destination Explorer (Wayfinder)
 
-Wayfinder is a cartographic travel catalog indexing global settlements, coordinates, terrain profiles, and regional divisions.
+Wayfinder is designed for travelers to discover destinations across the globe, view detailed travel telemetry (elevation, weather, coordinates, highlights), explore nested regions, and plan itineraries.
 
-### Route Breakdown & Architecture
-1. **Explore Destinations (Catalog Root)**: `/destinations`
-   - *Strategy:* Static Server Component with client-side interactive filter pills (`All Regions`, `East Asia`, `Southern Europe`, `Scandinavia`, `South America`, `North Africa`).
-   - *Design Reference:* `1_destination_listing.png`
-2. **Destination Detail**: `/destinations/[id]`
-   - *Strategy:* Dynamic Route Segment displaying elevation telemetry, cartographic overview, key information, and practical transit notes. Includes `generateStaticParams()` for compile-time optimization.
-   - *Design Reference:* `3_destination_detail_kyoto.png`
-3. **Continental & Sub-Regional Hierarchy**: `/regions/[[...slug]]`
-   - *Strategy:* **Optional Catch-All Route**.
-     - When `slug` is `undefined` (`/regions`): Renders the Continental Divisions overview with satellite terrain previews (`4_regions_landing_optional_path_root.png`).
-     - When `slug` is nested (`/regions/asia/japan/kansai`): Renders sub-regional settlement metrics, rail interconnectivity notes, and weather microclimate telemetry (`2_nested_region_explorer_kansai.png`).
-4. **Field Workspace Itinerary Draft**: `/(planner)/overview`
-   - *Strategy:* **Route Group `(planner)`** isolating workspace state from the public explorer. Renders a custom persistent sidebar layout (`PlannerSidebar.tsx`) with itinerary night stops, pinned geocode bookmarks, transit pass synthesis, and GeoJSON export (`5_trip_planner_overview_layout.png`).
-5. **Spatial Exception Handler**: `not-found.tsx`
-   - *Strategy:* Custom 404 with Router Diagnostic Note, unresolved path telemetry, and verified recovery shortcuts (`6_destination_region_not_found.png`).
+### Routes & Implementation
+
+* **`/destinations` — Destination Catalog**
+  * Displays curated travel destinations in responsive grid cards.
+  * Interactive filter pills (`All Regions`, `East Asia`, `Southern Europe`, `Scandinavia`, etc.) to filter cards instantly without full page reloads.
+  * Shows location tags, geocodes, and key highlights.
+
+* **`/destinations/[id]` — Dynamic Destination Detail**
+  * Uses Next.js dynamic routing (`[id]`) to render destination-specific details.
+  * Shows elevation, coordinates, best season to visit, currency, weather overview, and transit recommendations.
+  * Validates destination ID and triggers `notFound()` if an invalid destination is accessed.
+
+* **`/regions/[[...slug]]` — Optional Catch-All Regional Explorer**
+  * Implements Next.js **Optional Catch-All** routing:
+    * `/regions` (no slug): Displays the continental divisions overview (East Asia, Southern Europe, Scandinavia, etc.).
+    * `/regions/asia/japan/kansai` (nested slug): Displays deep regional telemetry, transit connectivity, weather microclimates, and regional settlements.
+
+* **`/(planner)/overview` — Route Group Itinerary Workspace**
+  * Utilizes a Next.js **Route Group `(planner)`** to provide an isolated layout without affecting the URL path.
+  * Features a persistent workspace sidebar with itinerary stops, pinned destinations, day-by-day notes, and GeoJSON export option.
+
+* **`not-found.tsx` — Custom Spatial 404**
+  * Displays a tailored 404 page whenever an unknown destination or region slug is requested, with quick recovery links back to the catalog.
 
 ---
 
 ## 🎓 Project 2: Student Directory (Campus Directory)
 
-Campus Directory is an academic informatics interface for university programs, student research profiles, and department tracks.
+Campus Directory provides an academic management and discovery interface for students, faculty departments, and specialized course tracks.
 
-### Route Breakdown & Architecture
-1. **Students Listing**: `/campus/students`
-   - *Strategy:* Interactive directory with instant search input and department filter dropdown (`Computer Science`, `Design`, `Business`).
-   - *Design Reference:* `2_students_listing.png`
-2. **Student Profile**: `/campus/students/[id]`
-   - *Strategy:* Dynamic route with student academic standing, research focus, advisor info, and enrolled subjects with credit weighting.
-   - *Design Reference:* `1_student_profile.png`
-3. **Departments Listing**: `/campus/departments`
-   - *Strategy:* Program catalog with faculty specialization counts, enrollment totals, and curriculum metrics.
-   - *Design Reference:* `3_department_listing.png`
-4. **Nested Department Specialization**: `/campus/departments/[dept]/[specialization]`
-   - *Strategy:* Nested dynamic routes (e.g. `/campus/departments/computer-science/web-development`) detailing specialization track codes, academic leads, core research labs, and filtered enrollees.
-   - *Design Reference:* `4_nested_department_page.png`
-5. **Directory Fallback 404**: `/campus/not-found.tsx`
-   - *Strategy:* Academic exception page with suggested internal starting points (`5_directory_fallback_not_found.png`).
+### Routes & Implementation
+
+* **`/campus/students` — Student Listing & Live Search**
+  * Full listing of enrolled students with avatars, majors, year, GPA, and student IDs.
+  * Real-time client-side search by name or major.
+  * Department dropdown filter (`Computer Science`, `Design`, `Business`).
+
+* **`/campus/students/[id]` — Dynamic Student Academic Profile**
+  * Dynamic route rendering full student records: academic status, advisor contact, completed credits, GPA breakdown, and enrolled courses with credit hours.
+
+* **`/campus/departments` — Department Catalog**
+  * Overview of all academic faculties, total enrolled students, faculty leads, and active specialization tracks.
+
+* **`/campus/departments/[dept]/[specialization]` — Nested Specialization Track**
+  * Nested dynamic routing (e.g., `/campus/departments/computer-science/web-development`).
+  * Displays track code, lead professor, labs, requirements, and students enrolled in that specific track.
+
+* **`/campus/not-found.tsx` — Directory Fallback 404**
+  * Campus-specific error screen when a student ID or department path does not exist.
 
 ---
 
-## 🏗️ Technical Architecture & Next.js App Router Highlights
+## ⚙️ Next.js App Router Concepts Demonstrated
+
+* **Dynamic Route Segments (`[id]`):** Used in `/destinations/[id]` and `/campus/students/[id]` with `generateStaticParams()` for fast static page generation.
+* **Nested Dynamic Routes (`[dept]/[specialization]`):** Used in `/campus/departments/[dept]/[specialization]` to handle multi-level academic hierarchies.
+* **Optional Catch-All Routes (`[[...slug]]`):** Used in `/regions/[[...slug]]` to handle both root `/regions` and arbitrary nested sub-paths like `/regions/asia/japan/kansai`.
+* **Route Groups (`(planner)`):** Used to create a dedicated sidebar layout for the trip workspace without adding `(planner)` into the URL path.
+* **Shared & Nested Layouts:** Separate headers, footers, and sidebars for Wayfinder and Campus Directory.
+* **Loading & Error States:** `loading.tsx` Suspense skeletons and `error.tsx` boundary handlers.
+* **Custom Not-Found Handling:** `not-found.tsx` for clean 404 resolution.
+
+---
+
+## 📁 Project Structure
 
 ```
 src/
 ├── app/
-│   ├── layout.tsx                   # Root HTML shell & global font styles
-│   ├── page.tsx                     # Master Project Hub & Selector
-│   ├── loading.tsx                  # Global Suspense & skeleton fallback
-│   ├── error.tsx                    # Segment error boundary with reset()
-│   ├── not-found.tsx                # Wayfinder spatial 404 handler
+│   ├── layout.tsx                              # Root HTML shell & metadata
+│   ├── page.tsx                                # Main portal showcasing both projects
+│   ├── loading.tsx                             # Global loading skeleton
+│   ├── error.tsx                               # Global error boundary
+│   ├── not-found.tsx                           # Global / Wayfinder 404 page
 │   │
 │   ├── destinations/
-│   │   ├── layout.tsx               # Wayfinder persistent navbar & footer
-│   │   ├── page.tsx                 # /destinations (Static listing + filters)
-│   │   └── [id]/
-│   │       └── page.tsx             # /destinations/[id] (Dynamic route)
+│   │   ├── layout.tsx                          # Wayfinder navigation & footer
+│   │   ├── page.tsx                            # Destination listing & filters
+│   │   └── [id]/page.tsx                       # Destination detail page
 │   │
 │   ├── regions/
-│   │   └── [[...slug]]/
-│   │       └── page.tsx             # /regions/[[...slug]] (Optional Catch-All)
+│   │   └── [[...slug]]/page.tsx                # Optional catch-all regional explorer
 │   │
 │   ├── (planner)/
 │   │   └── overview/
-│   │       ├── layout.tsx           # Route group layout with Workspace Sidebar
-│   │       └── page.tsx             # /(planner)/overview (Trip draft & notes)
+│   │       ├── layout.tsx                      # Route group workspace sidebar
+│   │       └── page.tsx                        # Itinerary draft & trip overview
 │   │
 │   └── campus/
-│       ├── layout.tsx               # Campus Directory navbar & footer
-│       ├── page.tsx                 # Redirect to /campus/students
-│       ├── not-found.tsx            # Campus Directory 404 fallback
+│       ├── layout.tsx                          # Campus Directory navigation & footer
+│       ├── not-found.tsx                       # Campus 404 fallback
 │       ├── students/
-│       │   ├── page.tsx             # /campus/students (Search & listing)
-│       │   └── [id]/
-│       │       └── page.tsx         # /campus/students/[id] (Student profile)
+│       │   ├── page.tsx                        # Student directory listing & search
+│       │   └── [id]/page.tsx                   # Student profile page
 │       └── departments/
-│           ├── page.tsx             # /campus/departments (Faculties listing)
-│           └── [dept]/
-│               └── [specialization]/
-│                   └── page.tsx     # Nested dynamic department route
+│           ├── page.tsx                        # Departments overview
+│           └── [dept]/[specialization]/
+│               └── page.tsx                    # Nested specialization track
 │
-├── components/                      # Reusable components
-├── data/                            # Static dummy data
-└── types/                           # Strict TypeScript interfaces
+├── components/                                 # Reusable UI cards, headers, footers
+├── data/                                       # Local dummy datasets
+└── types/                                      # TypeScript interfaces
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 How to Run Locally
 
 ### 1. Install Dependencies
 ```bash
@@ -120,9 +132,10 @@ npm install
 ```bash
 npm run dev
 ```
+
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 3. Build for Production
+### 3. Production Build
 ```bash
 npm run build
 npm run start
@@ -130,15 +143,17 @@ npm run start
 
 ---
 
-## 📋 Evaluation Quick-Links (Locally)
-- **Master Showcase Portal:** [http://localhost:3000/](http://localhost:3000/)
-- **Wayfinder Destinations:** [http://localhost:3000/destinations](http://localhost:3000/destinations)
-- **Wayfinder Destination Detail (Kyoto):** [http://localhost:3000/destinations/kyoto](http://localhost:3000/destinations/kyoto)
-- **Wayfinder Regional Catch-All Root:** [http://localhost:3000/regions](http://localhost:3000/regions)
-- **Wayfinder Nested Catch-All (Kansai):** [http://localhost:3000/regions/asia/japan/kansai](http://localhost:3000/regions/asia/japan/kansai)
-- **Wayfinder Route Group Planner:** [http://localhost:3000/overview](http://localhost:3000/overview)
-- **Wayfinder 404 Trigger:** [http://localhost:3000/destinations/invalid-slug](http://localhost:3000/destinations/invalid-slug)
-- **Campus Students Directory:** [http://localhost:3000/campus/students](http://localhost:3000/campus/students)
-- **Campus Student Profile (Aarav Mehta):** [http://localhost:3000/campus/students/aarav-mehta](http://localhost:3000/campus/students/aarav-mehta)
-- **Campus Departments:** [http://localhost:3000/campus/departments](http://localhost:3000/campus/departments)
-- **Campus Nested Department (Web Development):** [http://localhost:3000/campus/departments/computer-science/web-development](http://localhost:3000/campus/departments/computer-science/web-development)
+## 🔗 Quick Links (When Running Locally)
+
+### Wayfinder (Travel Destination Explorer)
+* **Destinations Listing:** [http://localhost:3000/destinations](http://localhost:3000/destinations)
+* **Destination Detail (Kyoto):** [http://localhost:3000/destinations/kyoto](http://localhost:3000/destinations/kyoto)
+* **Regional Explorer (Root):** [http://localhost:3000/regions](http://localhost:3000/regions)
+* **Nested Region (Kansai):** [http://localhost:3000/regions/asia/japan/kansai](http://localhost:3000/regions/asia/japan/kansai)
+* **Trip Planner Workspace:** [http://localhost:3000/overview](http://localhost:3000/overview)
+
+### Campus Directory (Student Directory)
+* **Students Directory:** [http://localhost:3000/campus/students](http://localhost:3000/campus/students)
+* **Student Profile (Aarav Mehta):** [http://localhost:3000/campus/students/aarav-mehta](http://localhost:3000/campus/students/aarav-mehta)
+* **Departments Catalog:** [http://localhost:3000/campus/departments](http://localhost:3000/campus/departments)
+* **Department Track (Web Development):** [http://localhost:3000/campus/departments/computer-science/web-development](http://localhost:3000/campus/departments/computer-science/web-development)
