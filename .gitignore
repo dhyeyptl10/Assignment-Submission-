@@ -1,16 +1,12 @@
-# Root gitignore
 node_modules/
 .next/
 out/
-build/
 dist/
+build/
 .DS_Store
 Thumbs.db
 *.log
-.env*.local
-
-# Sub-projects
-travel-destination-explorer/node_modules/
-travel-destination-explorer/.next/
-student-directory/node_modules/
-student-directory/.next/
+.env
+.env.local
+.env.*.local
+next-env.d.ts
